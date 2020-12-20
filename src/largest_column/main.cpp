@@ -1,9 +1,7 @@
 #include <vector>
 #include "ysbitmap.h"
 
-#include <string>
-#include <iostream>
-#include <fstream>
+
 
 static bool IsWhite(const unsigned char pix[])
 {
@@ -252,21 +250,21 @@ int main(int ac,char *av[])
 {
 	if(ac<3)
 	{
-		//printf("Usage: largest_column input.png output.png\n");
+		printf("Usage: largest_column input.png output.png\n");
 		return 1;
 	}
 
 	YsBitmap src;
 	if(YSOK!=src.LoadPng(av[1]))
 	{
-		//printf("Cannot open %s\n",av[1]);
+		printf("Cannot open %s\n",av[1]);
 		return 0;
 	}
 	src.Invert();
-	//if(src.GetHeight()>src.GetWidth())
-	//{
-	//	src=src.Rotate90R();
-	//}
+	if(src.GetHeight()>src.GetWidth())
+	{
+		src=src.Rotate90R();
+	}
 
 
 	auto bw=src;
@@ -291,19 +289,9 @@ int main(int ac,char *av[])
 
 		int x0,y0,x1,y1;
 		FindTrimWindow(x0,y0,x1,y1,bw);
-		//printf("Window %d %d %d %d\n",x0,y0,x1,y1);
-		std::cout << "{\"x\": ";
-		std::cout << x0;
-		std::cout << ", \"y\": ";
-		std::cout << y0;
-		std::cout << ", \"w\": ";
-		std::cout << x1 - x0;
-		std::cout << ", \"h\": ";
-		std::cout << y1 - y0;
-		std::cout << "}";
+		printf("Window %d %d %d %d\n",x0,y0,x1,y1);
 
 		ApplyMask(src,mask);
-		/*
 		auto cutout=src.CutOut(x0,y0,x1-x0+1,y1-y0+1);
 
 		RecoverAspectRatio(x0,y0,x1,y1,bw);
@@ -311,14 +299,13 @@ int main(int ac,char *av[])
 		output.Create(x1-x0+1,y1-y0+1);
 		output.Clear(255,255,255,255);
 		output.Copy(cutout,(output.GetWidth()-cutout.GetWidth())/2,(output.GetHeight()-cutout.GetHeight())/2);
-		*/
+
 		FILE *fp=fopen(av[2],"wb");
 		if(nullptr!=fp)
 		{
-			//output.SavePng(fp);
-			src.SavePng(fp);
+			output.SavePng(fp);
 			fclose(fp);
-			//printf("Wrote %s\n",av[2]);
+			printf("Wrote %s\n",av[2]);
 		}
 	}
 
