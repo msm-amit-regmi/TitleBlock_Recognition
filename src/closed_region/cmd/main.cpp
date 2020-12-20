@@ -6,10 +6,6 @@
 #include <mutex>
 #include <vector>
 
-#include <string>
-#include <iostream>
-#include <fstream>
-
 #ifdef max
 #undef max
 #endif
@@ -91,7 +87,6 @@ int main(int ac,char *av[])
 	map.MakeMap(bmp,fillCLoop);
 
 	YsString fn(av[2]);
-	/*
 	fn.ReplaceExtension(".png");
 	{
 		FILE *fp=fopen(fn.c_str(),"wb");
@@ -102,10 +97,10 @@ int main(int ac,char *av[])
 			printf("Wrote %s\n",av[2]);
 		}
 	}
-	*/
+
 	fillCLoop=true;
 	map.MakeMap(bmp,fillCLoop);
-	/*
+
 	fn=av[2];
 	fn.RemoveExtension();
 	fn=fn+"_filled.png";
@@ -118,8 +113,7 @@ int main(int ac,char *av[])
 			printf("Wrote %s\n",av[2]);
 		}
 	}
-	*/
-	fn = av[2];	
+
 	{
 		int maxNumPix=0;
 		for(auto &rgn : map.GetSubRegion())
@@ -130,55 +124,10 @@ int main(int ac,char *av[])
 			}
 		}
 
-		//printf("Largest Column=%d\n",maxNumPix);
+		printf("Largest Column=%d\n",maxNumPix);
 
 		const int noiseThr=40*40;
 		subRgnCount=0;
-		//#################################create json file modified amit 20190416
-		std::ofstream outfile;
-		outfile.open(fn);
-		outfile << "{";
-		//################################ create json file modified amit 20190416
-		for (auto &rgn : map.GetSubRegion())
-		{
-			int flag = 1;
-
-			if (noiseThr < rgn.numPixel && rgn.numPixel < maxNumPix)
-			{
-				flag = 0;
-			}
-			//if (noiseThr < rgn.numPixel && rgn.numPixel < maxNumPix)
-			{
-				auto bmp = map.GetRegionBitmap(rgn);
-
-				//################################ write box information modified amit 20190328
-				if (subRgnCount != 0)
-					outfile << ",";
-				outfile << "\"";
-				outfile << subRgnCount;
-				outfile << "\"";
-				outfile << ": [{\"x\": ";
-				outfile << rgn.min.x();
-				outfile << ", \"y\": ";
-				outfile << rgn.min.y();
-				outfile << ", \"w\": ";
-				outfile << rgn.max.x() - rgn.min.x();
-				outfile << ", \"h\": ";
-				outfile << rgn.max.y() - rgn.min.y();
-				outfile << ", \"drawing_area\": ";
-				outfile << flag;
-				/*
-				outfile << "\", \"cx\": \"";
-				outfile << rgn.min.x() + ((rgn.max.x() - rgn.min.x()) / 2);
-				outfile << "\", \"cy\": \"";
-				outfile << rgn.min.y() + ((rgn.max.y() - rgn.min.y()) / 2);
-				*/
-				outfile << "}]";
-				//################################ write box information modified amit 20190328
-				++subRgnCount;
-			}
-		}
-		/*
 		for(auto &rgn : map.GetSubRegion())
 		{
 			allRgn.push_back(rgn);
@@ -197,11 +146,6 @@ int main(int ac,char *av[])
 		{
 			t.join();
 		}
-		*/
-		//################################ close JSON file modified amit 20190416
-		outfile << "}";
-		outfile.close();
-		//################################ close JSON file modified amit 20190416
 	}
 
 	return 0;
