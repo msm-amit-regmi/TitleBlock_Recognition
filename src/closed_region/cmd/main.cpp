@@ -137,7 +137,7 @@ int main(int ac,char *av[])
 		//#################################create json file modified amit 20190416
 		std::ofstream outfile;
 		outfile.open(fn);
-		outfile << "{";
+		outfile << "{\"result\": [";
 		//################################ create json file modified amit 20190416
 		for (auto &rgn : map.GetSubRegion())
 		{
@@ -154,10 +154,9 @@ int main(int ac,char *av[])
 				//################################ write box information modified amit 20190328
 				if (subRgnCount != 0)
 					outfile << ",";
-				outfile << "\"";
-				outfile << subRgnCount;
-				outfile << "\"";
-				outfile << ": [{\"x\": ";
+				outfile << "{\"id\": ";
+				outfile << subRgnCount;				
+				outfile << ", \"x\": ";
 				outfile << rgn.min.x();
 				outfile << ", \"y\": ";
 				outfile << rgn.min.y();
@@ -166,14 +165,8 @@ int main(int ac,char *av[])
 				outfile << ", \"h\": ";
 				outfile << rgn.max.y() - rgn.min.y();
 				outfile << ", \"drawing_area\": ";
-				outfile << flag;
-				/*
-				outfile << "\", \"cx\": \"";
-				outfile << rgn.min.x() + ((rgn.max.x() - rgn.min.x()) / 2);
-				outfile << "\", \"cy\": \"";
-				outfile << rgn.min.y() + ((rgn.max.y() - rgn.min.y()) / 2);
-				*/
-				outfile << "}]";
+				outfile << flag;				
+				outfile << "}";
 				//################################ write box information modified amit 20190328
 				++subRgnCount;
 			}
@@ -199,7 +192,7 @@ int main(int ac,char *av[])
 		}
 		*/
 		//################################ close JSON file modified amit 20190416
-		outfile << "}";
+		outfile << "]}";
 		outfile.close();
 		//################################ close JSON file modified amit 20190416
 	}
