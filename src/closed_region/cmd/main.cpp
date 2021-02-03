@@ -147,7 +147,8 @@ int main(int ac,char *av[])
 			{
 				flag = 0;
 			}
-			//if (noiseThr < rgn.numPixel && rgn.numPixel < maxNumPix)
+
+			if (noiseThr < rgn.numPixel)
 			{
 				auto bmp = map.GetRegionBitmap(rgn);
 
