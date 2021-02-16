@@ -292,16 +292,20 @@ int main(int ac,char *av[])
 		int x0,y0,x1,y1;
 		FindTrimWindow(x0,y0,x1,y1,bw);
 		//printf("Window %d %d %d %d\n",x0,y0,x1,y1);
-		std::cout << "{\"x\": ";
-		std::cout << x0;
-		std::cout << ", \"y\": ";
-		std::cout << y0;
-		std::cout << ", \"w\": ";
-		std::cout << x1 - x0;
-		std::cout << ", \"h\": ";
-		std::cout << y1 - y0;
-		std::cout << "}";
-
+		//#################################create json file modified amit 20210216
+		std::ofstream outfile;
+		outfile.open(av[2]);
+		outfile << "{\"x\": ";
+		outfile << x0;
+		outfile << ", \"y\": ";
+		outfile << y0;
+		outfile << ", \"w\": ";
+		outfile << x1 - x0;
+		outfile << ", \"h\": ";
+		outfile << y1 - y0;
+		outfile << "}";
+		outfile.close();
+		//#################################create json file modified amit 20210216
 		ApplyMask(src,mask);
 		/*
 		auto cutout=src.CutOut(x0,y0,x1-x0+1,y1-y0+1);
@@ -312,7 +316,7 @@ int main(int ac,char *av[])
 		output.Clear(255,255,255,255);
 		output.Copy(cutout,(output.GetWidth()-cutout.GetWidth())/2,(output.GetHeight()-cutout.GetHeight())/2);
 		*/
-		FILE *fp=fopen(av[2],"wb");
+		FILE *fp=fopen(av[3],"wb");
 		if(nullptr!=fp)
 		{
 			//output.SavePng(fp);
